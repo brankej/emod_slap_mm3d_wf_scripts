@@ -43,6 +43,7 @@ parser.add_argument('-i_fid', "-INIT_FID_IMG",dest='i_fid', type=str, default=""
 parser.add_argument('-p', "-POSITIONS",dest='pos', type=str, help='Filename of Camera Positions. txt / csv File with MicMac Readable Header')
 parser.add_argument('-t_res', "-TAPIOCA_RES",dest='t_res', type=int, default=5000, help='Find Tie points using [number] px windows. 1/2 resolution image = best value for RGB bayer sensor')
 parser.add_argument('-n', "-NBVI",dest='nbvi', type=int, default=3, help='Number Visible Images for DenseMatching ,default = 3; min=2')
+parser.add_argument('-s_n', "-S_N",dest='s_nb', type=int, default=2000, help='Number Schnaps minimum remaining Tie Points. mm3d default = 1000 ,default = 2000')
 parser.add_argument('-d', "-DEFCOR",dest='defcor', type=float, default=0.1, help='DenseMatching Correlation Threshold. zero is none. mm3d default = 0.2 ,default = 0.1; min=0')
 parser.add_argument('-reg', "-REGUL",dest='regul', type=float, default=0.02, help='Regularization Factor (Smoothing). If your data does have some sharp transitions (side of buildings for instance), they will be smoothed. 0.9 =  real smooth / 0.9 > more noisy ,default = 0.02; min=0') # http://forum-micmac.forumprod.com/can-t-display-depth-map-t1601.html#p6371  ## http://forum-micmac.forumprod.com/c3dc-defcor-and-zreg-parameters-t1280.html#p5143
 parser.add_argument('-szw', "-SZW",dest='szw', type=int, default=1, help='Correlation Window Size (1 means 3x3) ,default = 1')
@@ -74,6 +75,7 @@ cameramodel = args.cam
 CamPos = args.pos
 init_img = args.i_fid
 tapioca_res = args.t_res
+s_nb = args.s_nb
 nbvi = args.nbvi
 defcor = args.defcor
 regul = args.regul
@@ -236,7 +238,7 @@ if tp == 1:
 
 
     ##3. Schnaps (improved tie points) #filter TiePoints (better distribution, avoid clogging)
-    cmd="mm3d Schnaps OIS%s HomolIn=_GoodOnes HomolOut=_Schnaps MoveBadImgs=1 > schnaps.txt" % (ending)
+    cmd="mm3d Schnaps OIS%s HomolIn=_GoodOnes HomolOut=_Schnaps MoveBadImgs=1 NbWin=%i  > schnaps.txt" % (ending, s_nb)
     print("--> %s"%(cmd))
     os.system(cmd)
 
