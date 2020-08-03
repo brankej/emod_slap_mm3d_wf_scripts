@@ -263,7 +263,7 @@ if dense == 1:
     os.chdir("..")
 
     ## Dense Cloud 2 Ply
-    cmd="mm3d Nuage2Ply MEC-Malt/NuageImProf_STD-MALT_Etape_%s.xml Attr=Ortho-MEC-Malt/Orthophotomosaic.tif Out=PointCloud.ply Normale=7 Mesh=0 Offs=[%s,%s,0] > nuage.txt" % (etappe, x_off, y_off)
+    cmd="mm3d Nuage2Ply MEC-Malt/%s Attr=Ortho-MEC-Malt/Orthophotomosaic.tif Out=PointCloud.ply Normale=7 Mesh=0 Offs=[%s,%s,0] > nuage.txt" % (etappe, x_off, y_off)
     print("--> %s"%(cmd))
     os.system(cmd)
 
