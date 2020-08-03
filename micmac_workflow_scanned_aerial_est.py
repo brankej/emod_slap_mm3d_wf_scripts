@@ -316,10 +316,12 @@ if ori == 1:
     print("--> %s"%(cmd))																
     os.system(cmd)
 
+    '''
     ##CAMPARI
     cmd="mm3d Campari OIS%s All-Ground All-Campari EmGPS=[Nav-Brut-RTL,0.5] SH=_Schnaps > campari.txt" % (ending) 
     print("--> %s"%(cmd))																	
     os.system(cmd)
+    '''
 
     print('\x1b[7;32;44m' +'--- ENDED SUCCESSFULLY: ---'+ '\x1b[0m')
     print('\x1b[7;32;44m' +'--- INTERIOR ORIENTATION ## EXTERIOR ORIENTATION ---'+ '\x1b[0m')
@@ -342,7 +344,7 @@ if dense == 1:
     print('\x1b[7;32;44m' +'--- Orthophoto ## Dense Matching ---'+ '\x1b[0m')
     print('\x1b[7;32;44m' + '-----------------------------' + '\x1b[0m')
 
-    cmd="mm3d Malt Ortho OIS%s All-Campari NbVI=%i ZoomF=%i ResolTerrain=%f DefCor=%f CostTrans=2 EZA=1 HrOr=1 Regul=%f SzW=%i > malt.txt" % (ending, nbvi, zoom, resol, defcor, regul, szw)
+    cmd="mm3d Malt Ortho OIS%s All-Ground NbVI=%i ZoomF=%i ResolTerrain=%f DefCor=%f CostTrans=2 EZA=1 HrOr=1 Regul=%f SzW=%i > malt.txt" % (ending, nbvi, zoom, resol, defcor, regul, szw)
     print("--> %s"%(cmd))
     os.system(cmd)
 
