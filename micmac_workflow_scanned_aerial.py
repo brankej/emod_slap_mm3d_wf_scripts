@@ -25,6 +25,7 @@ parser = argparse.ArgumentParser(description='MicMac Workflow Runner for Scanned
 parser.add_argument('-fid', "-FIDUCIALS",dest='fid', type=int, default=0, help='DO SETUP ?:  Fiducials ## Resampling to Scan Resolution, default = 0 / else 1')
 parser.add_argument('-a_fid', "-AUTO_FIDUCIALS",dest='a_fid', type=int, default=0, help='DO SETUP ?:  AUTO Fiducials  with KUGELHUPF ## Resampling to Scan Resolution, default = 0 / else 1')
 parser.add_argument('-tp', "-TIEPOINTS",dest='tp', type=int, default=0, help='DO SETUP ?:  Camera Positions ## Tie Points ## Tie Point Improvement, default = 0 / else 1')
+parser.add_argument('-tp_m', "-TIEPOINT_MASK", dest="tp_m", type=int, default=0, help='DO SETUP ?:  Tie Point Masking, default = 0 / else 1')
 parser.add_argument('-o', "-ORI",dest='ori', type=int, default=0, help='DO SETUP ?:  INTERIOR ORIENTATION ## EXTERIOR ORIENTATION, default = 0 / else 1')
 parser.add_argument('-o_sub', "-O_SUB",dest='o_sub', type=int, default=0, help='DO SETUP ?: Initialize TAPAS with subset of  the first "n" images FLAG -o_sub_n; ,default = 0 / else 1')
 parser.add_argument('-o_giv', "-O_GIV",dest='o_giv', type=int, default=0, help='DO SETUP ?: Initialize TAPAS with subset of given images FLAG -o_img; ,default = 0 / else 1')
@@ -57,6 +58,7 @@ args = parser.parse_args()
 fid = args.fid
 auto_fid = args.a_fid
 tp = args.tp
+tp_m = args.tp_m
 ori = args.ori
 o_sub = args.o_sub
 o_giv = args.o_giv
@@ -221,18 +223,31 @@ if tp == 1:
     os.system(cmd)
 
 
-    ## mask for get image inside! !!!!!
-    cmd='mm3d SaisieMasqQT "OIS-Reech_%s"' % (init_img)
-    print("--> %s"%(cmd))
-    os.system(cmd)
+    if tp_m == 1:
+        ## mask for get image inside! !!!!!
+        cmd='mm3d SaisieMasqQT "OIS-Reech_%s"' % (init_img)
+        print("--> %s"%(cmd))
+        os.system(cmd)
 
-    ##rename mask
-    os.rename("OIS-Reech_%s_Masq.tif" % (init_img[:-4]),"filtre.tif")
+        ##rename mask
+        os.rename("OIS-Reech_%s_Masq.tif" % (init_img[:-4]),"filtre.tif")
 
-    ##mask to all img.
-    cmd='mm3d HomolFilterMasq "OIS%s" GlobalMasq=filtre.tif PostOut=_GoodOnes > homolfilter.txt' % (ending)
-    print("--> %s"%(cmd))
-    os.system(cmd)
+        ##mask to all img.
+        cmd='mm3d HomolFilterMasq "OIS%s" GlobalMasq=filtre.tif PostOut=_GoodOnes > homolfilter.txt' % (ending)
+        print("--> %s"%(cmd))
+        os.system(cmd)
+
+    elif tp_m == 0 and os.path.exists("filtre.tif"):
+        print('\x1b[7;32;44m' +'--- SKIPPED MASKING: ---'+ '\x1b[0m')
+        print('\x1b[7;32;44m' +'--- found existing: filtre.tif ---'+ '\x1b[0m')
+        print('\x1b[7;32;44m' + '-----------------------------' + '\x1b[0m')
+
+    else:
+        print('\x1b[7;32;44m' +'--- SKIPPED MASKING: ---'+ '\x1b[0m')
+        print('\x1b[7;32;44m' +'--- not found existing: filtre.tif ---'+ '\x1b[0m')
+        print('\x1b[7;32;44m' + '--- EXIT ---' + '\x1b[0m')
+        print('\x1b[7;32;44m' + '-----------------------------' + '\x1b[0m')
+        os._exit(1)
 
 
 
