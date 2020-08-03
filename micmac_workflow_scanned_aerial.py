@@ -183,7 +183,7 @@ if fid == 1:
 
 
     ##III resamp
-    cmd='mm3d ReSampFid 1954%s 0.015 > resampfid.txt' % (ending) ###[15 muem ]
+    cmd='mm3d ReSampFid %s%s 0.015 > resampfid.txt' % (init_img[0:3], ending) ###[15 muem ]
     print("--> %s"%(cmd))
     os.system(cmd)
 
