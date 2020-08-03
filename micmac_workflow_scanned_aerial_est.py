@@ -362,26 +362,31 @@ if dense == 1:
     print('\x1b[7;32;44m' +'--- Orthophoto ## Dense Matching ---'+ '\x1b[0m')
     print('\x1b[7;32;44m' + '-----------------------------' + '\x1b[0m')
 
-    cmd="mm3d Malt Ortho OIS%s All-Ground NbVI=%i ZoomF=%i ResolTerrain=%f DefCor=%f CostTrans=2 EZA=1 HrOr=1 Regul=%f SzW=%i > malt.txt" % (ending, nbvi, zoom, resol, defcor, regul, szw)
+    cmd="mm3d Malt Ortho OIS%s All-Ground NbVI=%i ZoomF=%i ResolTerrain=%f DefCor=%f CostTrans=2 EZA=1 HrOr=1 Regul=%f SzW=%i MasqImGlob=filtre.tif > malt.txt" % (ending, nbvi, zoom, resol, defcor, regul, szw)
     print("--> %s"%(cmd))
     os.system(cmd)
 
 
-    cmd="mm3d Tawny Ortho-MEC-Malt Out=Orthophotomosaic.tif > tawny.txt" 
+    cmd="mm3d Tawny Ortho-MEC-Malt Out=Orthophotomosaic.tif RadiomEgal=0 > tawny.txt" 
     print("--> %s"%(cmd))
     os.system(cmd)
 
+    # check for last etappe
+    os.chdir("Mec-Malt")
+    mec_malt_list = os.listdir(".")
 
-    if zoom == 1 and resol == 0.5:
-        etappe = "9"
-    if zoom == 2 and resol == 0.5:
-        etappe = "8"
-    if zoom == 4 and resol == 0.5:
-        etappe = "7"
-    if zoom == 8 and resol == 0.5:
-        etappe = "6"
+    etappen = []
 
+    for i in mec_malt_list:
+        if i.startswith("Nuage") and i.endswith(".xml"):
+            etappen.append(i)
+        else:
+            pass
 
+    etappe = etappen[-1]
+    os.chdir("..")
+
+    ## Dense Cloud 2 Ply
     cmd="mm3d Nuage2Ply MEC-Malt/NuageImProf_STD-MALT_Etape_%s.xml Attr=Ortho-MEC-Malt/Orthophotomosaic.tif Out=PointCloud.ply Normale=7 Mesh=0 Offs=[%s,%s,0] > nuage.txt" % (etappe, x_off, y_off)
     print("--> %s"%(cmd))
     os.system(cmd)

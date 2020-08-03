@@ -247,16 +247,22 @@ if dense == 1:
     os.system(cmd)
 
 
-    if zoom == 1 and resol == 0.5:
-        etappe = "9"
-    if zoom == 2 and resol == 0.5:
-        etappe = "8"
-    if zoom == 4 and resol == 0.5:
-        etappe = "7"
-    if zoom == 8 and resol == 0.5:
-        etappe = "6"
+    # check for last etappe
+    os.chdir("Mec-Malt")
+    mec_malt_list = os.listdir(".")
 
+    etappen = []
 
+    for i in mec_malt_list:
+        if i.startswith("Nuage") and i.endswith(".xml"):
+            etappen.append(i)
+        else:
+            pass
+
+    etappe = etappen[-1]
+    os.chdir("..")
+
+    ## Dense Cloud 2 Ply
     cmd="mm3d Nuage2Ply MEC-Malt/NuageImProf_STD-MALT_Etape_%s.xml Attr=Ortho-MEC-Malt/Orthophotomosaic.tif Out=PointCloud.ply Normale=7 Mesh=0 Offs=[%s,%s,0] > nuage.txt" % (etappe, x_off, y_off)
     print("--> %s"%(cmd))
     os.system(cmd)
