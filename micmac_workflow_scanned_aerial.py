@@ -237,10 +237,20 @@ if tp == 1:
         print("--> %s"%(cmd))
         os.system(cmd)
 
+        ##3. Schnaps (improved tie points) #filter TiePoints (better distribution, avoid clogging)
+        cmd="mm3d Schnaps OIS%s HomolIn=_GoodOnes HomolOut=_Schnaps MoveBadImgs=1 NbWin=%i  > schnaps.txt" % (ending, s_nb)
+        print("--> %s"%(cmd))
+        os.system(cmd)
+
     elif tp_m == 0 and os.path.exists("filtre.tif"):
         print('\x1b[7;32;44m' +'--- SKIPPED MASKING: ---'+ '\x1b[0m')
         print('\x1b[7;32;44m' +'--- found existing: filtre.tif ---'+ '\x1b[0m')
         print('\x1b[7;32;44m' + '-----------------------------' + '\x1b[0m')
+
+        ##3. Schnaps (improved tie points) #filter TiePoints (better distribution, avoid clogging)
+        cmd="mm3d Schnaps OIS%s HomolOut=_Schnaps MoveBadImgs=1 NbWin=%i  > schnaps.txt" % (ending, s_nb)
+        print("--> %s"%(cmd))
+        os.system(cmd)
 
     else:
         print('\x1b[7;32;44m' +'--- SKIPPED MASKING: ---'+ '\x1b[0m')
@@ -249,12 +259,6 @@ if tp == 1:
         print('\x1b[7;32;44m' + '-----------------------------' + '\x1b[0m')
         os._exit(1)
 
-
-
-    ##3. Schnaps (improved tie points) #filter TiePoints (better distribution, avoid clogging)
-    cmd="mm3d Schnaps OIS%s HomolIn=_GoodOnes HomolOut=_Schnaps MoveBadImgs=1 NbWin=%i  > schnaps.txt" % (ending, s_nb)
-    print("--> %s"%(cmd))
-    os.system(cmd)
 
     print('\x1b[7;32;44m' +'--- ENDED SUCCESSFULLY: ---'+ '\x1b[0m')
     print('\x1b[7;32;44m' +'--- Camera Positions ## Tie Points ## Tie Point Improvement ---'+ '\x1b[0m')
