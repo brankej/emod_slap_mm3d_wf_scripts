@@ -50,6 +50,7 @@ parser.add_argument('-reg', "-REGUL",dest='regul', type=float, default=0.02, hel
 parser.add_argument('-szw', "-SZW",dest='szw', type=int, default=1, help='Correlation Window Size (1 means 3x3) ,default = 1')
 parser.add_argument('-o_sub_n', "-O_SUB_N",dest='o_sub_n', type=int, default=5, help='Initialize TAPAS with subset of  the first "n" images; default 5')
 parser.add_argument('-o_img', "-O_IMG", dest='o_img', type=str, nargs='+', help='Initialize TAPAS with subset of given images exp. "-img IMG05342.jpg IMG2314.jpg"')
+parser.add_argument('-s_res', "-SCAN_RES",dest='s_res', type=float, default=0.014, help='Scan resolution in mm. expl. 14 um = 0.014 mm ,default = 0.014')
 
 
 args = parser.parse_args()
@@ -83,6 +84,7 @@ regul = args.regul
 szw = args.szw
 o_sub_n = args.o_sub_n
 o_img = args.o_img
+s_res = args.s_res
 
 
 ###########################################################
@@ -185,7 +187,7 @@ if fid == 1:
 
 
     ##III resamp
-    cmd='mm3d ReSampFid %s%s 0.015 > resampfid.txt' % (init_img[0:3], ending) ###[15 muem ]
+    cmd='mm3d ReSampFid %s%s %f > resampfid.txt' % (init_img[0:3], ending, s_res)
     print("--> %s"%(cmd))
     os.system(cmd)
 
