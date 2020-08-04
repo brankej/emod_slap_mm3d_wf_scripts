@@ -246,8 +246,13 @@ if tp == 1:
         print('\x1b[7;32;44m' +'--- found existing: filtre.tif ---'+ '\x1b[0m')
         print('\x1b[7;32;44m' + '-----------------------------' + '\x1b[0m')
 
+        ##mask to all img.
+        cmd='mm3d HomolFilterMasq "OIS%s" GlobalMasq=filtre.tif PostOut=_GoodOnes > homolfilter.txt' % (ending)
+        print("--> %s"%(cmd))
+        os.system(cmd)
+
         ##3. Schnaps (improved tie points) #filter TiePoints (better distribution, avoid clogging)
-        cmd="mm3d Schnaps OIS%s HomolOut=_Schnaps MoveBadImgs=1 NbWin=%i  > schnaps.txt" % (ending, s_nb)
+        cmd="mm3d Schnaps OIS%s HomolIn=_GoodOnes HomolOut=_Schnaps MoveBadImgs=1 NbWin=%i  > schnaps.txt" % (ending, s_nb)
         print("--> %s"%(cmd))
         os.system(cmd)
 
